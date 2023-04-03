@@ -1,0 +1,251 @@
+﻿USE Students;
+
+
+
+
+create table fakultet (
+id_fakultet int not null primary key identity(1,1),
+fakultet nvarchar(50) not null
+);
+create table kafedra (
+id_kafedra int not null primary key identity(1,1),
+kafedra nvarchar(50) not null,
+id_fakultet int  foreign key  references fakultet(id_fakultet) not null
+);
+create table gruppa (
+id_gruppa int not null primary key identity(1,1),
+gruppa nvarchar(50) not null,
+id_kafedra int  foreign key  references kafedra(id_kafedra) not null
+);
+create table tip_nas_punkt (
+id_tip_nas_punkt int not null primary key identity(1,1),
+tip_nas_punkt nvarchar(50) not null
+);
+create table oblast (
+id_oblast int not null primary key identity(1,1),
+oblast nvarchar(50) not null
+);
+create table rayon (
+id_rayon int not null primary key identity(1,1),
+rayon nvarchar(50) not null,
+id_oblast int  foreign key  references oblast(id_oblast) not null
+);
+create table nas_punkt (
+id_nas_punkt int not null primary key identity(1,1),
+nas_punkt nvarchar(50) not null,
+id_tip_nas_punkt int  foreign key  references tip_nas_punkt(id_tip_nas_punkt) not null,
+id_rayon int  foreign key  references rayon(id_rayon) not null
+);
+create table grajdanstvo (
+id_grajdanstvo int not null primary key identity(1,1),
+grajdanstvo nvarchar(50) not null,
+);
+create table natsionalnost (
+id_natsionalnost int not null primary key identity(1,1),
+natsionalnost nvarchar(50) not null,
+);
+create table pol (
+id_pol int not null primary key identity(1,1),
+pol nvarchar(50) not null,
+);
+create table student (
+id_student int not null primary key identity(1,1),
+fam nvarchar(50) not null,
+imya nvarchar(50) not null,
+otch nvarchar(50) not null,
+passport nvarchar(12) not null,
+pasword nvarchar(50) not null,
+red_date date not null,
+id_gruppa int foreign key  references gruppa(id_gruppa) not null,
+id_nas_punkt int foreign key  references nas_punkt(id_nas_punkt) not null,
+id_natsionalnost int foreign key  references natsionalnost(id_natsionalnost) not null,
+id_pol int foreign key  references pol(id_pol) not null,
+id_grajdanstvo int foreign key  references grajdanstvo(id_grajdanstvo) not null,
+comments nvarchar(500) not null,
+foto nvarchar(500)
+);
+create table tip_kont (
+id_tip_kont int not null primary key identity(1,1),
+tip_kont nvarchar(50) not null
+);
+create table kontakty (
+id_kontakty int not null primary key identity(1,1),
+id_student int foreign key references student(id_student) not null,
+id_tip_kont int foreign key references tip_kont(id_tip_kont) not null
+);
+create table sostav (
+id_sostav int not null primary key identity(1,1),
+sostav nvarchar(50) not null
+);
+create table zvanie (
+id_zvanie int not null primary key identity(1,1),
+zvanie nvarchar(50) not null,
+id_sostav int foreign key references sostav(id_sostav) not null
+);
+create table voinsk_slujba (
+id_voinskaya_sl int not null primary key identity(1,1),
+data_nachala date not null,
+data_okonch date not null,
+nomer_prikaza nvarchar(50) not null,
+comments nvarchar(500) not null,
+id_student int foreign key references student(id_student) not null,
+id_zvanie int foreign key  references zvanie(id_zvanie) not null,
+);
+create table tip_pov_kvalif (
+id_tip_pov_kvalif int not null primary key identity(1,1),
+tip_pov_kvalif nvarchar(50) not null
+);
+create table pov_kvalif (
+id_pov_kvalif int not null primary key identity(1,1),
+data_pov date not null,
+nomer_doc nvarchar(50) not null,
+comments nvarchar(500) not null,
+id_tip_pov_kvalif int foreign key  references tip_pov_kvalif(id_tip_pov_kvalif) not null,
+id_student int foreign key references student(id_student) not null,
+);
+*/
+
+
+
+
+CREATE TABLE TempTable1
+    (
+      Type INT ,
+      ObjName VARCHAR(256) ,
+      Owner VARCHAR(25) ,
+      Sequence INT
+    ); 
+
+
+INSERT  INTO TempTable1
+        EXEC sp_MSdependencies NULL 
+
+
+SELECT  *
+FROM     TempTable1
+WHERE   Type = 8 --Tables 
+ORDER BY Sequence ,
+        ObjName 
+DROP TABLE TempTable1;
+
+
+
+
+
+
+/*
+INSERT fakultet VALUES
+('Business Administration'),
+('Information Technology'),
+('Electronic'),
+('Applied Mathematics'),
+('Economy');
+INSERT kafedra VALUES
+('Management',1),
+('Innovative development',2),
+('Applied Physics',3),
+('Applied Informatics and Math',4),
+('Economics and Finance',5);
+INSERT gruppa VALUES
+('Bus-Admin-19',1),
+('IT-W-20',2),
+('App-P-20',3),
+('App-Math-21',4),
+('Econ-P-22',5);
+INSERT grajdanstvo VALUES
+('kyrgyz'),
+('russian'),
+('german'),
+('american'),
+('chinese');
+INSERT natsionalnost VALUES
+('Kyrgyzstan'),
+('Russia'),
+('Germany'),
+('USA'),
+('China');
+INSERT pol VALUES
+('male'),
+('female');
+INSERT oblast VALUES
+('Issyk-Kul'),
+('Chechenstan'),
+('Bavariya'),
+('Texas'),
+('Shanchai');
+INSERT rayon VALUES
+('Tup',1),
+('Groznyi',2),
+('Alpsee',3),
+('Huiston',4),
+('Guanchjou',5);
+INSERT tip_nas_punkt VALUES
+('Town'),
+('Village'),
+('Stanitsy'),
+('Kishlaks'),
+('Townships');
+INSERT nas_punkt VALUES
+('Cholpon-Ata',1,1),
+('Ivanova',2,2),
+('Wismar',3,3),
+('Braiton-Bich',4,4),
+('Shi-Chama',5,5);
+INSERT student VALUES
+('Sagynbekova','Aiana','Samatovna','AB111111', 'getmethemoon', '2015-02-01', 1, 1, 1 ,1, 1, 'no comments', null),
+('Nogorbekov','Salim','Nurbekovich','AB222222','letitgo','2015-03-01',2,2,2,1,2, 'no comments', null),
+('Adamov','Adam','Adamovich','AB333333','nachhause','2016-06-01',3,3,3,1,3, 'no comments', null),
+('Albrecht','Kim','Albrechtina', 'AB444444','nichtrauchen','2016-05-01',4,4,4,2,4,'no comments', null);
+INSERT sostav VALUES
+('Operational Regiment'),
+('Support Troops'),
+('Reconnaissance units'),
+('Control Units');
+INSERT zvanie VALUES
+('General',1),
+('Colonel',2),
+('Captain',3),
+('Lieutenant',4),
+('Sergeant',1);
+INSERT voinsk_slujba VALUES
+('2018-06-01','2019-06-01','AD11111','no comments',1,1),
+('2018-03-01', '2019-03-01', 'AD22222', 'no comments', 2,2),
+('2018-06-01', '2019-06-01', 'AV33333', 'no comments', 5,3),
+('2018-05-01', '2019-05-01', 'AV44444', 'no comments', 6,4);
+INSERT tip_pov_kvalif VALUES
+('Beginner'),
+('Intermediate'),
+('Expert'),
+('Specialist');
+INSERT pov_kvalif VALUES
+('2020-12-12','AV1212','no comments', 1, 1),
+('2020-01-01','AV1251','no comments', 2, 2),
+('2020-10-10','AV1245','no comments', 3, 5),
+('2020-11-25','AV5212','no comments', 4, 6);
+INSERT tip_kont VALUES
+('email'),
+('mobile phone'),
+('home phone'),
+('work phone');
+INSERT kontakty VALUES
+('1','1'),
+('2','2'),
+('5','3'),
+('6','4');
+*/
+
+
+SELECT imya, fam
+FROM dbo.student
+WHERE id_gruppa = (SELECT id_gruppa FROM gruppa WHERE id_kafedra = (SELECT id_kafedra FROM kafedra WHERE id_fakultet = (SELECT id_fakultet FROM fakultet WHERE fakultet = 'Applied Mathematics')));
+
+
+SELECT imya, fam
+FROM dbo.student
+WHERE id_pol = (SELECT id_pol FROM pol WHERE pol = 'male');
+ 
+
+
+SELECT imya, fam
+FROM dbo.student
+WHERE id_natsionalnost = (SELECT id_natsionalnost FROM natsionalnost WHERE natsionalnost = 'Russia');
